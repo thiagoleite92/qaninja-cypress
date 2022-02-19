@@ -1,36 +1,36 @@
 import signup from '../pages/SignupPage'
+import SignupFactory from '../fixtures/factories/SignupFactory'
 
 describe('Signup', () => {
-
-  beforeEach(() => {
-    cy.fixture('deliver').then(function(deliverInfo){
-      this.deliver = deliverInfo
-    })
-  })
-
   it('success register to be a deliveryman',function (){
+    const deliver = SignupFactory.deliver()
+
     const expectedMessage = 'Recebemos os seus dados. Fique de olho na sua caixa de email, pois e em breve retornamos o contato.'
 
     signup.go()
-    signup.fillForm(this.deliver.signup)
+    signup.fillForm(deliver)
     signup.submit()
     signup.modalContentShouldBe(expectedMessage)
   })
 
   it('invalid register due invalid cpf',function(){
+    const deliver = SignupFactory.deliver()
+    deliver.cpf = 'cpfinvalido'
     const expectedMessage = 'Oops! CPF inválido'
 
     signup.go()
-    signup.fillForm(this.deliver.invalid_cpf)
+    signup.fillForm(deliver)
     signup.submit()
     signup.alertMessageShouldBe(expectedMessage)
   })
 
   it('invalid register due invalid email',function(){
+    const deliver = SignupFactory.deliver()
+    deliver.email = 'email-invalido'
     const expectedMessage = 'Oops! Email com formato inválido.'
 
     signup.go()
-    signup.fillForm(this.deliver.invalid_email)
+    signup.fillForm(deliver)
     signup.submit()
     signup.alertMessageShouldBe(expectedMessage)
   })
