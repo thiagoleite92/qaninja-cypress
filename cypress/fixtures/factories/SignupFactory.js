@@ -21,7 +21,7 @@ export default {
       city_state: 'São Paulo/SP'
     },
     delivery_method: 'Moto',
-    cnh: 'cnh-digital.jpg'
+    cnh: 'images.jpeg'
   }
 
   return data
