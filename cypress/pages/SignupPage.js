@@ -1,15 +1,14 @@
 class SignupPage {
 
   go() {
-    cy.viewport(1440, 900)
-    cy.visit('https://buger-eats.vercel.app/')
+    cy.visit('/')
     cy.get('a[href="/deliver"]').click()
-    cy.url().should('eq', 'https://buger-eats.vercel.app/deliver') // check current url
+    cy.url().should('eq', 'https://buger-eats-qa.vercel.app/deliver') // check current url
     cy.get('#page-deliver form h1').should('have.text', 'Cadastre-se para  fazer entregas')
   }
 
   fillForm(deliver) {
-    cy.get('input[name="name"]').type(deliver.name)
+    cy.get('input[name="fullName"]').type(deliver.name)
     cy.get('input[name="email"]').type(deliver.email)
     cy.get('input[name="cpf"]').type(deliver.cpf)
     cy.get('input[name="whatsapp"]').type(deliver.whatsapp)
@@ -21,7 +20,7 @@ class SignupPage {
     cy.get('input[name="district"]').should('have.value', deliver.address.district)
     cy.get('input[name="city-uf"]').should('have.value', deliver.address.city_state)
     cy.contains('.delivery-method li', deliver.delivery_method).click()
-    cy.get('input[accept^="image"]').attachFile(deliver.cnh)
+    cy.get('input[accept^="image"]').attachFile(`images/${deliver.cnh}`)
   }
 
   submit() {
@@ -37,4 +36,4 @@ class SignupPage {
   }
 }
 
-export default SignupPage;
+export default new SignupPage;
