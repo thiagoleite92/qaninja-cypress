@@ -1,2 +1,4 @@
 node_modules
 cypress/fixtures/images/
+cypress/screenshots
+cypress/videos
