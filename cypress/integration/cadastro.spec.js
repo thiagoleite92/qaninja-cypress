@@ -1,41 +1,60 @@
-describe('Cadastro', () => {
-  it('Want to be a deliveryman', () => {
-    cy.viewport(1440, 900)
-    cy.visit('https://buger-eats.vercel.app/')
-    cy.get('a[href="/deliver"]').click()
-    cy.url().should('eq', 'https://buger-eats.vercel.app/deliver') // check current url
-    cy.get('#page-deliver form h1').should('have.text', 'Cadastre-se para  fazer entregas')
+import SignupPage from '../pages/SignupPage'
 
-    const entregador = {
+describe('Cadastro', () => {
+  it('register to be a deliveryman', () => {
+      const deliver = {
       name: 'Thiago Leite',
       email: 'thiagoleite@email.com',
       cpf: '11122233300',
       whatsapp: '11999999999',
-      endereco: {
-        cep: '04534011',
-        rua: 'Rua Joaquim Floriano',
-        numero: '1000',
-        complemento: 'Ap 142',
-        bairro: 'Itaim Bibi',
-        cidade_uf: 'São Paulo/SP'
-      }
+      address: {
+        postalcode: '04534011',
+        street: 'Rua Joaquim Floriano',
+        number: '1000',
+        details: 'Ap 142',
+        district: 'Itaim Bibi',
+        city_state: 'São Paulo/SP'
+      },
+      delivery_method: 'Moto',
+      cnh: 'images/cnh-digital.jpg'
     }
 
-    cy.get('input[name="name"]').type(entregador.name)
-    cy.get('input[name="email"]').type(entregador.email)
-    cy.get('input[name="cpf"]').type(entregador.cpf)
-    cy.get('input[name="whatsapp"]').type(entregador.whatsapp)
+    const expectedMessage = 'Recebemos os seus dados. Fique de olho na sua caixa de email, pois e em breve retornamos o contato.'
 
-    cy.get('input[name="postalcode"]').type(entregador.endereco.cep)
-    cy.get('input[type="button"][value="Buscar CEP"]').click()
-    
+    const signup = new SignupPage()
 
-    cy.get('input[name="address-number"]').type(entregador.endereco.numero)
-    cy.get('input[name="address-details"]').type(entregador.endereco.complemento)
+    signup.go()
+    signup.fillForm(deliver)
+    signup.submit()
+    signup.modalContentShouldBe(expectedMessage)
+  })
 
-    
+  it('invalid cpf', () => {
+    const deliver = {
+      name: 'Thiago Leite',
+      email: 'thiagoleite@email.com',
+      cpf: '111222333AA',
+      whatsapp: '11999999999',
+      address: {
+        postalcode: '04534011',
+        street: 'Rua Joaquim Floriano',
+        number: '1000',
+        details: 'Ap 142',
+        district: 'Itaim Bibi',
+        city_state: 'São Paulo/SP'
+      },
+      delivery_method: 'Moto',
+      cnh: 'images/cnh-digital.jpg'
+    }
 
-    // cy.get('input[name="district"]').should('have.text', `${entregador.endereco.rua}`)
+    const expectedMessage = 'Oops! CPF inválido'
+
+    const signup = new SignupPage()
+
+    signup.go()
+    signup.fillForm(deliver)
+    signup.submit()
+    signup.alertMessageShouldBe(expectedMessage)
   })
 })
 
